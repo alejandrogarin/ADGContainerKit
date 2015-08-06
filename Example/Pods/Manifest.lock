@@ -1,0 +1,14 @@
+PODS:
+  - ADGContainerKit (0.1.0)
+
+DEPENDENCIES:
+  - ADGContainerKit (from `../`)
+
+EXTERNAL SOURCES:
+  ADGContainerKit:
+    :path: ../
+
+SPEC CHECKSUMS:
+  ADGContainerKit: 8474dbd814e9bc8b71b9c5db21e080f4e7025e36
+
+COCOAPODS: 0.38.0
