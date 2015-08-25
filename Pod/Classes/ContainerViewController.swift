@@ -36,19 +36,14 @@ public class ContainerViewController: UIViewController {
     public weak var delegate: ContainerViewControllerDelegate?
     public var transitionDuration: Double = 0.5
     public var animationOption = UIViewAnimationOptions.TransitionFlipFromLeft
-    public var currentSegueIdentifier: String?
+    public var currentControllerIdentifier: String?
 
     private var transitionInProgress: Bool = false
     
     // MARK: - Public API
         
     override public func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        self.delegate?.containerViewController(self, prepareViewController: segue.destinationViewController, sender: sender)
-        if let fromViewController = self.childViewControllers.first {
-            self.swap(fromViewController: fromViewController, toViewController: segue.destinationViewController)
-        } else {
-            addChild(viewController: segue.destinationViewController)
-        }
+        self.swapOrAddViewController(segue.destinationViewController)
     }
     
     public func transitionToViewControllerUsingSegue(identifier identifier: String, sender: AnyObject?) {
@@ -56,19 +51,33 @@ public class ContainerViewController: UIViewController {
             return
         }
         self.transitionInProgress = true
-        self.currentSegueIdentifier = identifier
+        self.currentControllerIdentifier = identifier
         self.delegate?.containerViewControllerWillStartTransition(self)
         self.performSegueWithIdentifier(identifier, sender: sender)
     }
+    
+    public func transitionToViewController(destinationViewController: UIViewController, withIdentifier identifier: String) {
+        if self.transitionInProgress {
+            return
+        }
+        self.transitionInProgress = true
+        self.currentControllerIdentifier = identifier
+        self.delegate?.containerViewControllerWillStartTransition(self)
+        self.swapOrAddViewController(destinationViewController)
+    }
 
     public func emptyContainer() {
-        self.currentSegueIdentifier = nil
+        self.currentControllerIdentifier = nil
         guard let childController = self.childViewControllers.first else {
             return
         }
         childController.willMoveToParentViewController(nil)
         childController.view.removeFromSuperview()
         childController.removeFromParentViewController()
+    }
+    
+    public func activeViewController() -> UIViewController? {
+        return self.childViewControllers.first
     }
     
     // MARK: - Private
@@ -79,6 +88,15 @@ public class ContainerViewController: UIViewController {
         let right = NSLayoutConstraint(item: view, attribute: NSLayoutAttribute.Trailing, relatedBy: NSLayoutRelation.Equal, toItem: superview, attribute: NSLayoutAttribute.Trailing, multiplier: 1.0, constant: 0)
         let bottom = NSLayoutConstraint(item: view, attribute: NSLayoutAttribute.Bottom, relatedBy: NSLayoutRelation.Equal, toItem: superview, attribute: NSLayoutAttribute.Bottom, multiplier: 1.0, constant: 0)
         superview.addConstraints([top, left, right, bottom])
+    }
+    
+    private func swapOrAddViewController(destinationViewController: UIViewController) {
+        self.delegate?.containerViewController(self, prepareViewController: destinationViewController, sender: self)
+        if let fromViewController = self.childViewControllers.first {
+            self.swap(fromViewController: fromViewController, toViewController: destinationViewController)
+        } else {
+            addChild(viewController: destinationViewController)
+        }
     }
     
     private func addChild(viewController viewController: UIViewController) {

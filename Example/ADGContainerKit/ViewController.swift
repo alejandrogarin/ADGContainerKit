@@ -46,8 +46,8 @@ class ViewController: UIViewController, ContainerViewControllerDelegate {
     func containerViewControllerDidStartTransition(controller: ContainerViewController) {
         self.segmentedControl.enabled = true
     }
-    
-    func containerViewController(controller: ContainerViewController, prepareForSegue segue: UIStoryboardSegue, sender: AnyObject?) {
+        
+    func containerViewController(controller: ContainerViewController, prepareViewController destinationViewController: UIViewController, sender: AnyObject?) {
         
     }
 }
