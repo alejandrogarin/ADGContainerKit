@@ -1,9 +1,3 @@
-# ADGContainerKit
-
-### Requirement
-
-Swift 1.2
-
 ### Introduction
 
 Easily manage N child view controllers using Interface Builder
