@@ -12,7 +12,7 @@ Pod::Spec.new do |s|
   s.version          = "0.1.0"
   s.summary          = "Easily manage N child view controllers using Interface Builder"
   s.description      = <<-DESC
-
+Easily manage N child view controllers using Interface Builder
                        DESC
   s.homepage         = "https://github.com/alejandrogarin/ADGContainerKit"
   s.screenshots     = "https://github.com/alejandrogarin/ADGContainerKit/example.png"
